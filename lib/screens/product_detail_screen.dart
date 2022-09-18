@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:shop_app/providers/products_provider.dart';
+import '../providers/products_provider.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  // final String title;
-  // final double price;
-
-  //const ProductDetailScreen(this.title, this.price, {super.key});
-
   static const routeName = '/product-detail';
 
   const ProductDetailScreen({super.key});
@@ -32,6 +27,22 @@ class ProductDetailScreen extends StatelessWidget {
               child: Image.network(
                 loadedProduct.imageUrl,
                 fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('\$${loadedProduct.price}'),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              width: double.infinity,
+              child: Text(
+                loadedProduct.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
               ),
             ),
           ],

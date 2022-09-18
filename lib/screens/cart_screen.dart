@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:shop_app/widgets/cart_item.dart';
-import 'package:shop_app/providers/cart.dart' show Cart;
+import '../widgets/cart_item.dart';
+import '../providers/cart.dart' show Cart;
+import '../providers/orders.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -43,17 +44,29 @@ class CartScreen extends StatelessWidget {
                   ),
                   TextButton(
                     //style: ButtonStyle(backgroundColor: Theme.of(context).colorScheme.secondary as MaterialStateProperty<Color>),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<Orders>(context, listen: false).addOrder(
+                          cart.items.values.toList(), cart.totalPrice);
+                      cart.clear();
+                      final snackBar = SnackBar(
+                        content: const Text('Order Confirmed'),
+                        action: SnackBarAction(
+                          onPressed: () => {},
+                          label: '',
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
                     child: const Text(
                       'Order Now',
                       style: TextStyle(fontSize: 20),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Expanded(
@@ -66,7 +79,7 @@ class CartScreen extends StatelessWidget {
                   productId: cart.items.keys.toList()[index]),
               itemCount: cart.itemCount,
             ),
-          )
+          ),
         ],
       ),
     );

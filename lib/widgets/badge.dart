@@ -40,7 +40,7 @@ class Badge extends StatelessWidget {
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }

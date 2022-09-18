@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:shop_app/providers/product.dart';
+import '../providers/product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  var _items = [
+  final _items = [
     Product(
       id: 'p1',
       title: 'Red Shirt',
@@ -51,7 +51,13 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void addProduct() {
+    //TODO add Product list addition
     // _items.add(value);
+    notifyListeners();
+  }
+  void removeProduct() {
+    //TODO add Product list removal
+    // _items.remove(value);
     notifyListeners();
   }
 }
