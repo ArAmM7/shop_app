@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/user_products_screen.dart';
 
 import '../screens/orders_screen.dart';
 
@@ -25,6 +26,13 @@ class MainDrawer extends StatelessWidget {
             Icons.shopping_cart_checkout,
             () => Navigator.of(context)
                 .pushReplacementNamed(OrdersScreen.routeName),
+          ),
+          const Divider(),
+          buildListTile(
+            'User Products',
+            Icons.edit_note,
+            () => Navigator.of(context)
+                .pushReplacementNamed(UserProductsScreen.routeName),
           ),
         ],
       ),

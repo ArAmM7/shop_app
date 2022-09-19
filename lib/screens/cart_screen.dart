@@ -42,20 +42,24 @@ class CartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
                   TextButton(
                     //style: ButtonStyle(backgroundColor: Theme.of(context).colorScheme.secondary as MaterialStateProperty<Color>),
                     onPressed: () {
-                      Provider.of<Orders>(context, listen: false).addOrder(
-                          cart.items.values.toList(), cart.totalPrice);
-                      cart.clear();
-                      final snackBar = SnackBar(
-                        content: const Text('Order Confirmed'),
-                        action: SnackBarAction(
-                          onPressed: () => {},
-                          label: '',
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      if (cart.items.isNotEmpty) {
+                        Provider.of<Orders>(context, listen: false).addOrder(
+                            cart.items.values.toList(), cart.totalPrice);
+                        cart.clear();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Order Confirmed'),
+                            action: SnackBarAction(
+                              onPressed: () => {},
+                              label: '',
+                            ),
+                          ),
+                        );
+                      }
                     },
                     child: const Text(
                       'Order Now',

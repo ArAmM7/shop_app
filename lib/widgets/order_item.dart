@@ -33,7 +33,7 @@ class _OrderItemState extends State<OrderItem> {
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Text(
-                  '\$${widget.order.amount}',
+                  '\$${widget.order.amount.toStringAsFixed(2)}',
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ],
@@ -61,7 +61,7 @@ class _OrderItemState extends State<OrderItem> {
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           Text(
-                            '${widget.order.products[index].quantity} x \$${widget.order.products[index].price}',
+                            '${widget.order.products[index].quantity} x \$${widget.order.products[index].price.toStringAsFixed(2)}',
                             style: Theme.of(context).textTheme.caption,
                           )
                         ],

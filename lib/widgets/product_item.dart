@@ -17,7 +17,7 @@ class ProductItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: GridTile(
         footer: GridTileBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: const Color.fromRGBO(0, 0, 0, 0.8),
           leading: IconButton(
             icon: Icon(
               product.isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -28,16 +28,28 @@ class ProductItem extends StatelessWidget {
           title: Text(
             product.title,
             textAlign: TextAlign.center,
-            overflow: TextOverflow.visible,
-            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
           trailing: IconButton(
             icon: Icon(
               Icons.shopping_cart,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            onPressed: () =>
-                cart.addItem(product.id, product.price, product.title),
+            onPressed: () {
+              cart.addItem(product.id, product.price, product.title);
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Item added to cart'),
+                  duration: const Duration(milliseconds: 3600),
+                  action: SnackBarAction(
+                    onPressed: () => cart.removeSingleItem(product.id),
+                    label: 'Undo',
+                  ),
+                ),
+              );
+            },
           ),
         ),
         child: GestureDetector(
