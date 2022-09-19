@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/edit_product_screen.dart';
-import '../widgets/user_product_item.dart';
 import '../providers/products_provider.dart';
+import '../widgets/user_product_item.dart';
 import '../widgets/main_drawer.dart';
+import '../screens/edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';
