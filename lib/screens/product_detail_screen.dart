@@ -29,19 +29,17 @@ class ProductDetailScreen extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text('\$${loadedProduct.price}'),
-            const SizedBox(
-              height: 10,
+            Container(
+              height: 24,
+              margin: const EdgeInsets.all(10),
+              child: Text('\$${loadedProduct.price}'),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 24),
               width: double.infinity,
               child: Text(
                 loadedProduct.description,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.justify,
                 softWrap: true,
               ),
             ),

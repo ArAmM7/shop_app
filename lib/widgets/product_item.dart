@@ -23,7 +23,17 @@ class ProductItem extends StatelessWidget {
               product.isFavorite ? Icons.favorite : Icons.favorite_border,
               color: Theme.of(context).colorScheme.secondary,
             ),
-            onPressed: () => product.toggleFav(),
+            onPressed: () async{
+              try {
+                 await product.toggleFav();
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: const Duration(milliseconds: 3600),
+                  content: Text('An error occurred $e'),
+                  action: null,
+                ));
+              }
+            },
           ),
           title: Text(
             product.title,
@@ -53,8 +63,10 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         child: GestureDetector(
-          onTap: () => Navigator.of(context)
-              .pushNamed(ProductDetailScreen.routeName, arguments: product.id),
+          onTap: () {
+            Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
+                arguments: product.id);
+          },
           child: Image.network(
             product.imageUrl,
             fit: BoxFit.cover,

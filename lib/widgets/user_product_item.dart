@@ -35,9 +35,18 @@ class UserProductItem extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () =>
-                  Provider.of<ProductsProvider>(context, listen: false)
-                      .removeProduct(id),
+              onPressed: () async {
+                try {
+                  await Provider.of<ProductsProvider>(context, listen: false)
+                      .removeProduct(id);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    duration: const Duration(milliseconds: 3600),
+                    content: Text('An error occurred $e'),
+                    action: null,
+                  ));
+                }
+              },
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,

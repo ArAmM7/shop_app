@@ -43,29 +43,7 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  TextButton(
-                    //style: ButtonStyle(backgroundColor: Theme.of(context).colorScheme.secondary as MaterialStateProperty<Color>),
-                    onPressed: () {
-                      if (cart.items.isNotEmpty) {
-                        Provider.of<Orders>(context, listen: false).addOrder(
-                            cart.items.values.toList(), cart.totalPrice);
-                        cart.clear();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: const Text('Order Confirmed'),
-                            action: SnackBarAction(
-                              onPressed: () => {},
-                              label: '',
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Order Now',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
+                  OrderButton(cart: cart),
                 ],
               ),
             ),
@@ -86,6 +64,45 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: widget.cart.items.isEmpty || _isLoading
+          ? null
+          : () async {
+              setState(() => _isLoading = true);
+              if (widget.cart.items.isNotEmpty) {
+                await Provider.of<Orders>(context, listen: false).addOrder(
+                    widget.cart.items.values.toList(), widget.cart.totalPrice);
+                widget.cart.clear();
+                setState(() => _isLoading = false);
+              }
+            },
+      child: _isLoading
+          ? const CircularProgressIndicator()
+          : const Text(
+              'Order Now',
+              style: TextStyle(fontSize: 20),
+            ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
+import '../providers/products_provider.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import '../widgets/main_drawer.dart';
@@ -21,6 +22,15 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showFavOnly = false;
+
+  late Future _productsFuture;
+
+  @override
+  void initState() {
+    _productsFuture = Provider.of<ProductsProvider>(context, listen: false)
+        .fetchAndSetProducts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +74,26 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         ],
       ),
-      body: ProductsGrid(_showFavOnly),
       drawer: const MainDrawer(),
+      body: FutureBuilder(
+        future: _productsFuture,
+        builder: (ctx, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (dataSnapshot.error != null) {
+              // error handling
+              return Center(
+                child: Text('An Error occurred: $dataSnapshot.error'),
+              );
+            } else {
+              return Consumer<ProductsProvider>(
+                builder: (ctx, products, child) => ProductsGrid(_showFavOnly),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }

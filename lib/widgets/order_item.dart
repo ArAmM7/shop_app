@@ -39,18 +39,16 @@ class _OrderItemState extends State<OrderItem> {
               ],
             ),
             subtitle: Text(
-              DateFormat('dd MM yyyy hh:mm').format(widget.order.dateTime),
+              DateFormat('dd/MMM/yyyy hh:mm').format(widget.order.dateTime),
             ),
             trailing: IconButton(
-                onPressed: () => setState(() {
-                      _expanded = !_expanded;
-                    }),
+                onPressed: () => setState(() => _expanded = !_expanded),
                 icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more)),
           ),
           if (_expanded)
             Container(
               margin: const EdgeInsets.all(12),
-              height: min(widget.order.products.length * 24 + 20, 180),
+              height: min(widget.order.products.length * 24 + 12, 180),
               child: ListView.builder(
                   itemBuilder: (context, index) => Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,7 +61,7 @@ class _OrderItemState extends State<OrderItem> {
                           Text(
                             '${widget.order.products[index].quantity} x \$${widget.order.products[index].price.toStringAsFixed(2)}',
                             style: Theme.of(context).textTheme.caption,
-                          )
+                          ),
                         ],
                       ),
                   itemCount: widget.order.products.length),
