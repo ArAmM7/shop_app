@@ -39,8 +39,7 @@ class CartItem extends StatelessWidget {
           ],
         ),
       ),
-      onDismissed: (direction) =>
-          Provider.of<Cart>(context, listen: false).removeItem(productId),
+      onDismissed: (direction) => Provider.of<Cart>(context, listen: false).removeItem(productId),
       direction: DismissDirection.endToStart,
       background: Container(
         margin: const EdgeInsets.symmetric(
@@ -80,8 +79,7 @@ class CartItem extends StatelessWidget {
                 child: FittedBox(
                   child: Text(
                     '\$$price',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                   ),
                 ),
               ),

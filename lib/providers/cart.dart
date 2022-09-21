@@ -7,10 +7,7 @@ class CartItem {
   final double price;
 
   const CartItem(
-      {required this.id,
-      required this.title,
-      required this.quantity,
-      required this.price});
+      {required this.id, required this.title, required this.quantity, required this.price});
 }
 
 class Cart with ChangeNotifier {
@@ -64,10 +61,7 @@ class Cart with ChangeNotifier {
       _items.update(
           productId,
           (value) => CartItem(
-              id: value.id,
-              title: value.title,
-              quantity: value.quantity - 1,
-              price: value.price));
+              id: value.id, title: value.title, quantity: value.quantity - 1, price: value.price));
       notifyListeners();
     } else {
       _items.remove(productId);

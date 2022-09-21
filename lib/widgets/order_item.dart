@@ -39,7 +39,7 @@ class _OrderItemState extends State<OrderItem> {
               ],
             ),
             subtitle: Text(
-              DateFormat('dd/MMM/yyyy hh:mm').format(widget.order.dateTime),
+              DateFormat('dd/MMM/yyyy HH:MM').format(widget.order.dateTime),
             ),
             trailing: IconButton(
                 onPressed: () => setState(() => _expanded = !_expanded),

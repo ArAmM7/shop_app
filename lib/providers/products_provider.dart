@@ -3,15 +3,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../.secrets/secrets.dart' as secrets;
 import '../models/http_exception.dart';
 import '../providers/product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  final _url = Uri.https(
-      'shop-app-d0b16-default-rtdb.europe-west1.firebasedatabase.app',
-      '/products.json');
+  final _domain = secrets.domainDatabase;
+  final String authToken;
+  final String userId;
 
-  List<Product> _items = [];
+  ProductsProvider(this.userId, this.authToken, this._items);
+
+  List<Product> _items;
 
   List<Product> get items {
     return [..._items];
@@ -27,15 +30,20 @@ class ProductsProvider with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     try {
+      final url = Uri.https(
+        _domain,
+        '/products.json',
+        {'auth': authToken},
+      );
       final response = await http.post(
-        _url,
+        url,
         body: jsonEncode(
           {
             'title': product.title,
             'description': product.description,
             'price': product.price,
             'imageUrl': product.imageUrl,
-            'isFavorite': product.isFavorite,
+            'creatorId': userId,
           },
         ),
       );
@@ -56,9 +64,7 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
-      final url = Uri.https(
-          'shop-app-d0b16-default-rtdb.europe-west1.firebasedatabase.app',
-          '/products/$id.json');
+      final url = Uri.https(_domain, '/products/$id.json', {'auth': authToken});
       try {
         final response = await http.patch(
           url,
@@ -83,16 +89,12 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> removeProduct(String id) async {
-    final url = Uri.https(
-        'shop-app-d0b16-default-rtdb.europe-west1.firebasedatabase.app',
-        '/products/$id.json');
-    final existingProductIndex =
-        _items.indexWhere((element) => element.id == id);
+    final url = Uri.https(_domain, '/products/$id.json', {'auth': authToken});
+    final existingProductIndex = _items.indexWhere((element) => element.id == id);
     try {
       final response = await http.delete(url);
       if (response.statusCode >= 400) {
-        throw HttpException(
-            'Could not delete Product. because ${response.body}');
+        throw HttpException('Could not delete Product. because ${response.body}');
       }
       _items.removeAt(existingProductIndex);
       notifyListeners();
@@ -102,22 +104,37 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final queryParameters = filterByUser
+        ? {'auth': authToken, 'orderBy': '"creatorId"', 'equalTo': '"$userId"'}
+        : {'auth': authToken};
+    final url = Uri.https(
+      _domain,
+      '/products.json',
+      queryParameters,
+    );
+
     try {
-      final response = await http.get(_url);
+      final response = await http.get(url);
       if (response.body.toLowerCase() == 'null') {
         return;
       }
-      final extractedData = jsonDecode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final urlFav = Uri.https(_domain, '/userFavorites/$userId.json', {'auth': authToken});
+      final responseFav = await http.get(urlFav);
+      final favoriteData = jsonDecode(responseFav.body);
+
       final List<Product> loadedProducts = [];
       extractedData.forEach((key, value) {
         loadedProducts.add(Product(
-            id: key,
-            title: value['title'],
-            description: value['description'],
+            id: key.toString(),
+            title: value['title'].toString(),
+            description: value['description'].toString(),
             price: value['price'].toDouble(),
-            imageUrl: value['imageUrl'],
-            isFavorite: value['isFavorite']));
+            imageUrl: value['imageUrl'].toString(),
+            isFavorite: responseFav.body.toLowerCase() == 'null'
+                ? false
+                : favoriteData[key.toString()] ?? false));
       });
       _items = loadedProducts;
       notifyListeners();

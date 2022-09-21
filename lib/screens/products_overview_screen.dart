@@ -14,6 +14,8 @@ enum _FilterOptions {
 }
 
 class ProductsOverviewScreen extends StatefulWidget {
+  static const routeName = 'products-overview';
+
   const ProductsOverviewScreen({super.key});
 
   @override
@@ -27,8 +29,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   @override
   void initState() {
-    _productsFuture = Provider.of<ProductsProvider>(context, listen: false)
-        .fetchAndSetProducts();
+    _productsFuture = Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
     super.initState();
   }
 
@@ -46,8 +47,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
             ),
             child: IconButton(
               icon: const Icon(Icons.shopping_cart),
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(CartScreen.routeName),
+              onPressed: () => Navigator.of(context).pushNamed(CartScreen.routeName),
             ),
           ),
           PopupMenuButton(

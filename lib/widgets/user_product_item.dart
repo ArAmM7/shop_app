@@ -9,8 +9,7 @@ class UserProductItem extends StatelessWidget {
   final String imageUrl;
   final String id;
 
-  const UserProductItem(
-      {Key? key, required this.title, required this.imageUrl, required this.id})
+  const UserProductItem({Key? key, required this.title, required this.imageUrl, required this.id})
       : super(key: key);
 
   @override
@@ -18,6 +17,7 @@ class UserProductItem extends StatelessWidget {
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
+        backgroundColor: Colors.transparent,
         backgroundImage: NetworkImage(imageUrl),
       ),
       trailing: SizedBox(
@@ -27,8 +27,8 @@ class UserProductItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context)
-                  .pushNamed(EditProductScreen.routeName, arguments: id),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(EditProductScreen.routeName, arguments: id),
               icon: Icon(
                 Icons.edit,
                 color: Theme.of(context).colorScheme.secondary,
@@ -37,8 +37,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               onPressed: () async {
                 try {
-                  await Provider.of<ProductsProvider>(context, listen: false)
-                      .removeProduct(id);
+                  await Provider.of<ProductsProvider>(context, listen: false).removeProduct(id);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: const Duration(milliseconds: 3600),

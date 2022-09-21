@@ -43,8 +43,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_isInit) {
       final productId = ModalRoute.of(context)!.settings.arguments as String?;
       if (productId != null) {
-        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
-            .findById(productId);
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false).findById(productId);
         _initValues = {
           'title': _editedProduct.title,
           'description': _editedProduct.description,
@@ -68,8 +67,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await Provider.of<ProductsProvider>(context, listen: false)
             .updateProduct(_editedProduct.id, _editedProduct);
       } else {
-        await Provider.of<ProductsProvider>(context, listen: false)
-            .addProduct(_editedProduct);
+        await Provider.of<ProductsProvider>(context, listen: false).addProduct(_editedProduct);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -87,9 +85,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Products'),
-        actions: [
-          IconButton(onPressed: _saveForm, icon: const Icon(Icons.save))
-        ],
+        actions: [IconButton(onPressed: _saveForm, icon: const Icon(Icons.save))],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -149,8 +145,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       ),
                       TextFormField(
                         initialValue: _initValues['description'],
-                        decoration:
-                            const InputDecoration(labelText: 'Description'),
+                        decoration: const InputDecoration(labelText: 'Description'),
                         keyboardType: TextInputType.multiline,
                         maxLines: 3,
                         validator: (val) {
@@ -179,13 +174,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             margin: const EdgeInsets.only(top: 8, right: 10),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  width: 1,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
+                                  width: 1, color: Theme.of(context).colorScheme.onBackground),
                             ),
-                            child: !Uri.tryParse(_imageUrlController.text)!
-                                    .hasAbsolutePath
+                            child: !Uri.tryParse(_imageUrlController.text)!.hasAbsolutePath
                                 ? const Text('Enter image URL')
                                 : FittedBox(
                                     child: Image.network(
@@ -196,20 +187,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                           Expanded(
                             child: TextFormField(
-                              decoration:
-                                  const InputDecoration(labelText: 'Image URL'),
+                              decoration: const InputDecoration(labelText: 'Image URL'),
                               textInputAction: TextInputAction.done,
                               keyboardType: TextInputType.url,
                               controller: _imageUrlController,
                               onChanged: (_) {
-                                if (!Uri.tryParse(_imageUrlController.text)!
-                                        .hasAbsolutePath ||
-                                    (!_imageUrlController.text
-                                            .toLowerCase()
-                                            .endsWith('.png') &&
-                                        !_imageUrlController.text
-                                            .toLowerCase()
-                                            .endsWith('.jpg') &&
+                                if (!Uri.tryParse(_imageUrlController.text)!.hasAbsolutePath ||
+                                    (!_imageUrlController.text.toLowerCase().endsWith('.png') &&
+                                        !_imageUrlController.text.toLowerCase().endsWith('.jpg') &&
                                         !_imageUrlController.text
                                             .toLowerCase()
                                             .endsWith('.jpeg'))) {

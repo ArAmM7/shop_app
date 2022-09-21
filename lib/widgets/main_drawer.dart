@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/auth.dart';
 import '../screens/user_products_screen.dart';
 import '../screens/orders_screen.dart';
 
@@ -11,9 +13,7 @@ class MainDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          AppBar(
-              title: const Text('Welcome to My Shop'),
-              automaticallyImplyLeading: false),
+          AppBar(title: const Text('Welcome to My Shop'), automaticallyImplyLeading: false),
           const Divider(),
           buildListTile(
             'Shop',
@@ -24,15 +24,23 @@ class MainDrawer extends StatelessWidget {
           buildListTile(
             'Orders',
             Icons.shopping_cart_checkout,
-            () => Navigator.of(context)
-                .pushReplacementNamed(OrdersScreen.routeName),
+            () => Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName),
           ),
           const Divider(),
           buildListTile(
             'User Products',
             Icons.edit_note,
-            () => Navigator.of(context)
-                .pushReplacementNamed(UserProductsScreen.routeName),
+            () => Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName),
+          ),
+          const Divider(),
+          buildListTile(
+            'Logout',
+            Icons.logout,
+            () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
+              Provider.of<Auth>(context, listen: false).logout();
+            },
           ),
         ],
       ),
