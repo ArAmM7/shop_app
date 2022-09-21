@@ -77,15 +77,15 @@ class Orders with ChangeNotifier {
           loadedOrders.add(
             OrderItem(
               id: key,
-              amount: value['amount'],
+              amount: value['amount'].toDouble(),
               dateTime: DateTime.parse(value['dateTime']),
               products: (value['products'] as List<dynamic>)
                   .map(
                     (e) => CartItem(
-                      id: e['id'],
-                      title: e['title'],
-                      quantity: e['quantity'],
-                      price: e['price'],
+                      id: e['id'].toString(),
+                      title: e['title'].toString(),
+                      quantity: e['quantity'].toInt(),
+                      price: e['price'].toDouble(),
                     ),
                   )
                   .toList(),
@@ -96,6 +96,7 @@ class Orders with ChangeNotifier {
       _orders = loadedOrders.reversed.toList();
       notifyListeners();
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

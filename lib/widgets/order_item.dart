@@ -29,7 +29,7 @@ class _OrderItemState extends State<OrderItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'order #${widget.order.id}',
+                  'order # ${widget.order.id}',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 Text(

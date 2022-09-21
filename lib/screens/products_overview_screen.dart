@@ -78,7 +78,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       body: FutureBuilder(
         future: _productsFuture,
         builder: (ctx, dataSnapshot) {
-          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting ||
+              dataSnapshot.connectionState == ConnectionState.active) {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (dataSnapshot.error != null) {

@@ -66,7 +66,7 @@ class ProductsProvider with ChangeNotifier {
             {
               'title': newProduct.title,
               'description': newProduct.description,
-              'price': newProduct.price,
+              'price': newProduct.price.toDouble(),
               'imageUrl': newProduct.imageUrl,
             },
           ),
@@ -115,7 +115,7 @@ class ProductsProvider with ChangeNotifier {
             id: key,
             title: value['title'],
             description: value['description'],
-            price: value['price'],
+            price: value['price'].toDouble(),
             imageUrl: value['imageUrl'],
             isFavorite: value['isFavorite']));
       });
