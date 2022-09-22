@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../.secrets/secrets.dart' as secrets;
+import '../.secrets/secrets.dart' as secrets; // file where sensitive information is stored
 import '../providers/cart.dart';
 
 class OrderItem {
