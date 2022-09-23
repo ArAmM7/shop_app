@@ -55,9 +55,10 @@ class ProductsProvider with ChangeNotifier {
           price: product.price,
           imageUrl: product.imageUrl);
       _items.add(newProduct);
-      notifyListeners();
     } catch (e) {
       rethrow;
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -81,10 +82,11 @@ class ProductsProvider with ChangeNotifier {
           throw const HttpException('Unable to update status');
         }
         _items[prodIndex] = newProduct;
-        notifyListeners();
       } catch (e) {
         rethrow;
-      } finally {}
+      } finally {
+        notifyListeners();
+      }
     }
   }
 
@@ -97,10 +99,10 @@ class ProductsProvider with ChangeNotifier {
         throw HttpException('Could not delete Product. because ${response.body}');
       }
       _items.removeAt(existingProductIndex);
-      notifyListeners();
     } catch (e) {
-      notifyListeners();
       rethrow;
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -116,10 +118,10 @@ class ProductsProvider with ChangeNotifier {
 
     try {
       final response = await http.get(url);
-      if (response.body.toLowerCase() == 'null') {
+      if (response.body.toString().toLowerCase().contains('null')) {
         return;
       }
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = jsonDecode(response.body); //as Map<String, dynamic>;
       final urlFav = Uri.https(_domain, '/userFavorites/$userId.json', {'auth': authToken});
       final responseFav = await http.get(urlFav);
       final favoriteData = jsonDecode(responseFav.body);
@@ -137,9 +139,10 @@ class ProductsProvider with ChangeNotifier {
                 : favoriteData[key.toString()] ?? false));
       });
       _items = loadedProducts;
-      notifyListeners();
     } catch (e) {
       rethrow;
+    } finally {
+      notifyListeners();
     }
   }
 }

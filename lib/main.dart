@@ -13,6 +13,7 @@ import './screens/cart_screen.dart';
 import './screens/orders_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/user_products_screen.dart';
+import './helpers/custom_route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,6 +48,11 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
                 brightness: Brightness.light,
                 fontFamily: 'Lato',
+                pageTransitionsTheme: PageTransitionsTheme(builders: {
+                  TargetPlatform.android: CustomPageTransitionBuilder(),
+                  TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                  TargetPlatform.windows: CustomPageTransitionBuilder(),
+                }),
                 colorScheme: const ColorScheme(
                     brightness: Brightness.light,
                     primary: Colors.purple,
@@ -63,11 +69,9 @@ class MyApp extends StatelessWidget {
                 ? const ProductsOverviewScreen()
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
-                    builder: (ctx, snapshot) =>
-                        snapshot.connectionState == ConnectionState.waiting ||
-                                snapshot.connectionState == ConnectionState.active
-                            ? const SplashScreen()
-                            : const AuthScreen(),
+                    builder: (ctx, snapshot) => snapshot.connectionState == ConnectionState.waiting
+                        ? const SplashScreen()
+                        : const AuthScreen(),
                   ),
             routes: {
               ProductDetailScreen.routeName: (ctx) => const ProductDetailScreen(),

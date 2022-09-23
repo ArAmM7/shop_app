@@ -14,41 +14,46 @@ class OrderItem extends StatefulWidget {
   State<OrderItem> createState() => _OrderItemState();
 }
 
-class _OrderItemState extends State<OrderItem> {
+class _OrderItemState extends State<OrderItem> with SingleTickerProviderStateMixin{
   var _expanded = false;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          ListTile(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'order # ${widget.order.id}',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                Text(
-                  '\$${widget.order.amount.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 360),
+      curve: Curves.easeInOut,
+      height: _expanded ? min(widget.order.products.length * 20 + 110, 200) : 108,
+      child: Card(
+        margin: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            ListTile(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'order # ${widget.order.id}',
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                  Text(
+                    '\$${widget.order.amount.toStringAsFixed(2)}',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ],
+              ),
+              subtitle: Text(
+                DateFormat('dd/MMM/yyyy HH:MM').format(widget.order.dateTime),
+              ),
+              trailing: IconButton(
+                  onPressed: () => setState(() => _expanded = !_expanded),
+                  icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more)),
             ),
-            subtitle: Text(
-              DateFormat('dd/MMM/yyyy HH:MM').format(widget.order.dateTime),
-            ),
-            trailing: IconButton(
-                onPressed: () => setState(() => _expanded = !_expanded),
-                icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more)),
-          ),
-          if (_expanded)
-            Container(
-              margin: const EdgeInsets.all(12),
-              height: min(widget.order.products.length * 24 + 12, 180),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 360),
+              margin: const EdgeInsets.all(8),
+              curve: Curves.easeInOut,
+              height: _expanded ? min(widget.order.products.length * 20, 100) : 0,
               child: ListView.builder(
                   itemBuilder: (context, index) => Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,7 +71,8 @@ class _OrderItemState extends State<OrderItem> {
                       ),
                   itemCount: widget.order.products.length),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }

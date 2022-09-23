@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/helpers/custom_route.dart';
 
 import '../providers/auth.dart';
 import '../screens/user_products_screen.dart';
@@ -24,7 +25,13 @@ class MainDrawer extends StatelessWidget {
           buildListTile(
             'Orders',
             Icons.shopping_cart_checkout,
-            () => Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName),
+            //() => Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName),
+            () => Navigator.of(context).pushReplacement(
+              CustomRoute(
+                builder: (context) => const OrdersScreen(),
+                settings: const RouteSettings(),
+              ),
+            ),
           ),
           const Divider(),
           buildListTile(

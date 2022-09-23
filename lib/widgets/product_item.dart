@@ -68,9 +68,18 @@ class ProductItem extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: product.id);
           },
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
+          child: Hero(
+            createRectTween: (begin, end) => MaterialRectCenterArcTween(begin: begin, end: end),
+            transitionOnUserGestures: true,
+            tag: product.id,
+            child: FadeInImage(
+              fadeInDuration: const Duration(milliseconds: 160),
+              fit: BoxFit.contain,
+              placeholder: const AssetImage('assets/images/Loading_icon.gif'),
+              image: NetworkImage(
+                product.imageUrl,
+              ),
+            ),
           ),
         ),
       ),

@@ -25,7 +25,7 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showFavOnly = false;
 
-  late Future _productsFuture;
+  Future _productsFuture = Future(() => null); // use uninitialized late instead
 
   @override
   void initState() {
@@ -78,11 +78,10 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       body: FutureBuilder(
         future: _productsFuture,
         builder: (ctx, dataSnapshot) {
-          if (dataSnapshot.connectionState == ConnectionState.waiting ||
-              dataSnapshot.connectionState == ConnectionState.active) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            if (dataSnapshot.error != null) {
+            if (dataSnapshot.hasError) {
               // error handling
               return Center(
                 child: Text('An Error occurred: $dataSnapshot.error'),
